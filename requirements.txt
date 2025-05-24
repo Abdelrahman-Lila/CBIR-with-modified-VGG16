@@ -1,7 +1,7 @@
 streamlit
 numpy
-Pillow
 matplotlib
+tensorflow
 h5py
-opencv-python
-scikit-learn
+scipy
+sklearn

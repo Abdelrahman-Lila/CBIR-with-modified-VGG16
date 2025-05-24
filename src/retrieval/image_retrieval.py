@@ -1,26 +1,42 @@
-def retrieve_images(query_image_path, features_path, top_n=3):
-    import numpy as np
-    import h5py
-    from sklearn.metrics.pairwise import cosine_similarity
-    from PIL import Image
+import h5py
+import numpy as np
+import os
+from scipy import spatial
+from ..feature_extraction.vgg_feature_extractor import VGGNet
+from .visualization import plot_feature_space
 
-    # Load the features
-    with h5py.File(features_path, 'r') as f:
-        features = f['features'][:]
-        image_paths = list(f['image_paths'])
 
-    # Load the query image and extract its features
-    query_image = Image.open(query_image_path)
-    query_image = query_image.resize((224, 224))  # Resize to match the model input
-    query_image = np.array(query_image) / 255.0  # Normalize
-    query_image = query_image.flatten()  # Flatten the image
+def retrieve_images(query_img, features_path, top_n=3):
+    # Load features
+    with h5py.File(features_path, "r") as h5f:
+        feats = h5f["dataset_1"][:]
+        imgNames = h5f["dataset_2"][:]
 
-    # Compute cosine similarity between the query image and all features
-    similarities = cosine_similarity([query_image], features)[0]
+    # Extract query image features
+    model = VGGNet()
+    query_feat = model.extract_feat(query_img)
 
-    # Get the top N similar images
-    top_indices = np.argsort(similarities)[-top_n:][::-1]
-    top_similarities = similarities[top_indices]
-    top_image_paths = [image_paths[i] for i in top_indices]
+    # Compute cosine‐similarity scores
+    scores = 1 - np.array([spatial.distance.cosine(query_feat, f) for f in feats])
+    rank_ID = np.argsort(scores)[::-1]
+    top_ids = rank_ID[:top_n]
 
-    return top_image_paths, top_similarities
+    # (Optional) print & visualize
+    for i, idx in enumerate(top_ids):
+        name = imgNames[idx]
+        name = name.decode("utf-8") if isinstance(name, (bytes, bytearray)) else name
+        print(f"{i + 1}. {name} => {scores[idx]:.4f}")
+    fig = plot_feature_space(
+        feats, query_feat, top_ids, imgNames, "VGG16 Feature Space - Retrieval Results"
+    )
+
+    # Build results list
+    img_dir = "data/all_images"
+    results = []
+    for idx in top_ids:
+        name = imgNames[idx]
+        if isinstance(name, (bytes, bytearray)):
+            name = name.decode("utf-8")
+        results.append(os.path.join(img_dir, name))
+
+    return results, fig

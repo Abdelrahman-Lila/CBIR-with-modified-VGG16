@@ -1,62 +1,66 @@
-# Streamlit CBIR Application
+# CBIR Streamlit Application
 
-This project is a Content-Based Image Retrieval (CBIR) application built using Streamlit. It allows users to upload a query image and retrieves similar images from a dataset, displaying the results along with a similarity graph.
+This project implements a Content-Based Image Retrieval (CBIR) system using a modified VGG16 model for feature extraction and similarity retrieval. The application is built using Streamlit, allowing users to upload images and visualize the results interactively.
 
 ## Project Structure
 
 ```
-streamlit-cbir-app
+cbir-streamlit-app
+├── data
+│   ├── all_images          # Directory containing images for feature extraction
+│   └── query_images        # Directory for user-uploaded query images
 ├── src
 │   ├── feature_extraction
-│   │   └── extract_features.py
-│   ├── retrieval
-│   │   └── image_retrieval.py
-│   └── utils
-│       └── visualization.py
-├── data
-│   ├── all_images
-│   └── query_images
-├── app.py
-├── requirements.txt
-└── README.md
+│   │   ├── extract_features.py  # Extracts features from images
+│   │   └── vgg_feature_extractor.py  # Defines the VGGNet class for feature extraction
+│   └── retrieval
+│       ├── image_retrieval.py  # Retrieves similar images and computes similarity scores
+│       └── visualization.py      # Visualizes the feature space in 3D
+├── streamlit_app.py             # Main Streamlit application file
+├── requirements.txt              # Lists project dependencies
+└── README.md                     # Documentation for the project
 ```
 
-## Installation
+## Setup Instructions
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```
    git clone <repository-url>
-   cd streamlit-cbir-app
+   cd cbir-streamlit-app
    ```
 
-2. Install the required dependencies:
+2. **Install dependencies**:
+   It is recommended to create a virtual environment before installing the dependencies.
    ```
    pip install -r requirements.txt
    ```
 
+3. **Prepare the data**:
+   - Place your images in the `data/all_images` directory for feature extraction.
+   - Upload your query images to the `data/query_images` directory.
+
 ## Usage
 
-1. Place your images in the `data/all_images` directory for the dataset and any query images in the `data/query_images` directory.
-
-2. Run the Streamlit application:
+1. **Run the Streamlit application**:
    ```
-   streamlit run app.py
+   streamlit run streamlit_app.py
    ```
 
-3. Open your web browser and go to `http://localhost:8501` to access the application.
+2. **Upload an image**:
+   - Use the provided interface to upload a query image.
 
-4. Upload a query image and view the retrieved similar images along with the similarity graph.
+3. **View results**:
+   - The application will extract features from the uploaded image, retrieve similar images from the database, and display a 3D graph of the feature space along with the best match.
 
-## Features
+## Dependencies
 
-- Upload a query image for searching.
-- Retrieve and display the most similar images from the dataset.
-- Visualize the similarity between the query image and the retrieved images.
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+- Streamlit
+- NumPy
+- Matplotlib
+- TensorFlow
+- h5py
+- scikit-learn
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the LICENSE file for details.

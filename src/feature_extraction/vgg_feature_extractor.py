@@ -4,12 +4,6 @@ from tensorflow.keras.applications.vgg16 import VGG16
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import preprocess_input
 
-model = VGG16(weights='imagenet', 
-              input_shape=(224, 224, 3), 
-              pooling='max', 
-              include_top=False)
-model.summary()
-
 class VGGNet:
     def __init__(self):
         self.input_shape = (224, 224, 3)
