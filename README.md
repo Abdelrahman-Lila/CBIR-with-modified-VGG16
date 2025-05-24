@@ -25,7 +25,7 @@ cbir-streamlit-app
 
 1. **Clone the repository**:
    ```
-   git clone <repository-url>
+   git clone https://github.com/Abdelrahman-Lila/CBIR-with-modified-VGG16/tree/streamlit_app.git
    cd cbir-streamlit-app
    ```
 
