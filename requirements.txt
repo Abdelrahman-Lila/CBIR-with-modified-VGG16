@@ -1,0 +1,7 @@
+streamlit
+numpy
+matplotlib
+tensorflow
+h5py
+scipy
+sklearn
