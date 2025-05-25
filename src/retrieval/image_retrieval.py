@@ -21,7 +21,6 @@ def retrieve_images(query_img, features_path, top_n=3):
     rank_ID = np.argsort(scores)[::-1]
     top_ids = rank_ID[:top_n]
 
-    # (Optional) print & visualize
     for i, idx in enumerate(top_ids):
         name = imgNames[idx]
         name = name.decode("utf-8") if isinstance(name, (bytes, bytearray)) else name
